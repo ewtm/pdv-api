@@ -31,7 +31,8 @@ jobs:
     - name: Build Application JAR
       run: mvn clean package
 
-    - name: Docker Compose Build 
+    - name: Docker Compose Build
+      working-directory: ./
       run: docker compose build
 
 

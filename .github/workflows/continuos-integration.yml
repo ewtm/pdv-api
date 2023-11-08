@@ -37,5 +37,7 @@ jobs:
 
     - name: Push to Docker Hub Container Registry
       run: |
+        docker tag ${{ secrets.DOCKER_USERNAME }}/pdv-api:latest ${{ secrets.DOCKER_USERNAME }}/pdv-api:${{ github.run_id }}
+
         docker push ${{ secrets.DOCKER_USERNAME }}/pdv-api:${{ github.run_id }}
         docker push ${{ secrets.DOCKER_USERNAME }}/pdv-api:latest

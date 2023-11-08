@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+
+  db:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      TZ: America/Sao_Paulo
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: pdvdb
+      MYSQL_PASSWORD: root
+    networks:
+      - ewtm-network
+
+  javaApi:
+    image: ewtm/pdv-api
+    restart: always
+    container_name: pdv-api
+    ports:
+      - 8080:8080
+    environment:
+      TZ: America/Sao_Paulo
+      SPRING.DATASOURCE.URL: jdbc:mysql://db:3306/pdvdb?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING.DATASOURCE.USERNAME: root
+      SPRING.DATASOURCE.PASSWORD: root
+    command: mvn spring-boot:run
+    depends_on:
+      - db
+    networks:
+      - ewtm-network
+  
+networks:
+  ewtm-network:
+    driver: bridge

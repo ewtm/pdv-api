@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.leandrosnazareth.pdvapi.config.SpringFoxConfig;
-import br.com.leandrosnazareth.pdvapi.dto.ProductDTO;
+import br.com.leandrosnazareth.pdvapi.dto.ProductDto;
 import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import br.com.leandrosnazareth.pdvapi.service.ProductService;
 import br.com.leandrosnazareth.pdvapi.util.MensageConstant;
@@ -40,7 +40,7 @@ public class ProductController {
 
     @ApiOperation(value = "Listar todos produtos com paginação")
     @GetMapping
-    public Page<ProductDTO> findAllPagination(
+    public Page<ProductDto> findAllPagination(
             @RequestParam(value = "page", defaultValue = "0") Integer pagina,
             @RequestParam(value = "size", defaultValue = "5") Integer tamanhoPagina) {
         PageRequest pageRequest = PageRequest.of(pagina, tamanhoPagina);
@@ -49,63 +49,63 @@ public class ProductController {
 
     @ApiOperation(value = "Listar todos produtos ativos")
     @GetMapping("all")
-    public List<ProductDTO> findAllActive() {
+    public List<ProductDto> findAllActive() {
         return productService.findAllActive();
     }
 
     @GetMapping("{id}")
     @ApiOperation(value = "Buscar produto pelo ID")
-    public ResponseEntity<ProductDTO> findProductById(@PathVariable Long id)
+    public ResponseEntity<ProductDto> findProductById(@PathVariable Long id)
             throws ResourceNotFoundException {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
-        ProductDTO product = productService.findById(id)
+        ProductDto product = productService.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
         return ResponseEntity.ok().body(product);
     }
 
     @GetMapping("active/{id}")
     @ApiOperation(value = "Buscar produto ativo pelo ID")
-    public ResponseEntity<ProductDTO> findByIDAndActive(@PathVariable Integer id)
+    public ResponseEntity<ProductDto> findByIDAndActive(@PathVariable Integer id)
             throws ResourceNotFoundException {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
         // retorna a exception
-        ProductDTO productDto = productService.findByIdAndActive(id)
+        ProductDto productDto = productService.findByIdAndActive(id)
                 .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
         return ResponseEntity.ok().body(productDto);
     }
 
     @GetMapping("name/{name}")
     @ApiOperation(value = "Buscar qualquer produto pelo nome")
-    public ResponseEntity<ProductDTO> findByName(@PathVariable String name)
+    public ResponseEntity<ProductDto> findByName(@PathVariable String name)
             throws ResourceNotFoundException {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
         // retorna a exception
-        ProductDTO productDto = productService.findByName(name)
+        ProductDto productDto = productService.findByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + name));
         return ResponseEntity.ok().body(productDto);
     }
 
     @GetMapping("name/active/{name}")
     @ApiOperation(value = "Buscar produto ativos pelo nome")
-    public ResponseEntity<ProductDTO> findByNameAndActive(@PathVariable String name)
+    public ResponseEntity<ProductDto> findByNameAndActive(@PathVariable String name)
             throws ResourceNotFoundException {
         // retornar um Optional<prductDto> e converte para productDto, em caso nulo
         // retorna a exception
-        ProductDTO productDto = productService.findByNameAndActive(name)
+        ProductDto productDto = productService.findByNameAndActive(name)
                 .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + name));
         return ResponseEntity.ok().body(productDto);
     }
 
     @PostMapping
     @ApiOperation(value = "Salva um produto")
-    public ProductDTO createProduct(@Valid @RequestBody ProductDTO productDto) {
+    public ProductDto createProduct(@Valid @RequestBody ProductDto productDto) {
         return productService.save(productDto);
     }
 
     @ApiOperation(value = "Deletar produto pelo ID")
     @DeleteMapping("{id}")
     public Map<String, Boolean> deleteById(@PathVariable Long id) {
-        ProductDTO productDto = productService.findByIdAndActive(id)
+        ProductDto productDto = productService.findByIdAndActive(id)
                 .orElseThrow(() -> new ResourceNotFoundException(MensageConstant.PRODUTO_NAO_ENCONTRADO + id));
         productService.delete(productDto);
         Map<String, Boolean> response = new HashMap<>();
@@ -115,8 +115,8 @@ public class ProductController {
 
     @PutMapping("{id}")
     @ApiOperation(value = "Atualizar produto")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable(value = "id") Long id,
-            @Valid @RequestBody ProductDTO productDto) throws ResourceNotFoundException {
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable(value = "id") Long id,
+                                                    @Valid @RequestBody ProductDto productDto) throws ResourceNotFoundException {
         productService.findById(productDto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         MensageConstant.PRODUTO_NAO_ENCONTRADO + productDto.getId()));

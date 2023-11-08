@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import br.com.leandrosnazareth.pdvapi.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,7 +19,8 @@ import com.github.dozermapper.core.DozerBeanMapperBuilder;
 
 import br.com.leandrosnazareth.pdvapi.domain.entity.Sale;
 import br.com.leandrosnazareth.pdvapi.domain.repository.SaleRepository;
-import br.com.leandrosnazareth.pdvapi.dto.SaleDTO;
+import br.com.leandrosnazareth.pdvapi.dto.SaleDto;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SaleService {
@@ -29,23 +31,23 @@ public class SaleService {
     @Autowired
     private SaleRepository saletRepository;
 
-    public SaleDTO save(SaleDTO saleDto) {
+    public SaleDto save(SaleDto saleDto) {
         Sale sale = saletRepository.save(modelMapper.map(saleDto, Sale.class));
-        return modelMapper.map(sale, SaleDTO.class);
+        return modelMapper.map(sale, SaleDto.class);
     }
 
-    public Page<SaleDTO> findAll(Pageable pageable) {
+    public Page<SaleDto> findAll(Pageable pageable) {
         return saletRepository.findAll(pageable)
                 .map((sale -> DozerBeanMapperBuilder.buildDefault()// converte pag<Sale> para page<saledto>
-                        .map(sale, SaleDTO.class)));
+                        .map(sale, SaleDto.class)));
     }
 
-    public Optional<SaleDTO> findById(long id) {
+    public Optional<SaleDto> findById(long id) {
         return saletRepository.findById(id)
-                .map(sale -> modelMapper.map(sale, SaleDTO.class));
+                .map(sale -> modelMapper.map(sale, SaleDto.class));
     }
 
-    public void delete(SaleDTO saletDto) {
+    public void delete(SaleDto saletDto) {
         Sale sale = modelMapper.map(saletDto, Sale.class);
         saletRepository.delete(sale);
     }
@@ -62,9 +64,21 @@ public class SaleService {
         return saletRepository.count();
     }
 
-    public List<SaleDTO> findTopByOrderByIdDesc() {
+    public List<SaleDto> findTopByOrderByIdDesc() {
         return saletRepository.findTop5ByOrderByIdDesc().stream()
-                .map(sale -> modelMapper.map(sale, SaleDTO.class))
+                .map(sale -> modelMapper.map(sale, SaleDto.class))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public SaleDto update(SaleDto saleDto,Long id) {
+        Sale sale = modelMapper.map(saleDto, Sale.class);
+        saletRepository.delete(sale);
+
+        saleDto.getProductSolds().forEach( productSoldDTO -> productSoldDTO.setId(null));
+        saleDto.setId(null);
+        Sale saleNew = saletRepository.save(modelMapper.map(saleDto, Sale.class));
+        return modelMapper.map(saleNew, SaleDto.class);
+    }
+
 }

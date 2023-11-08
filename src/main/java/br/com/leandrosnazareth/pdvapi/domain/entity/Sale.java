@@ -51,6 +51,9 @@ public class Sale implements Serializable {
 	@NotNull(message = "{campo.formapagamento.obrigatorio}")
 	private Payment payment;
 
+	@NotNull(message = "{campo.mesa.obrigatorio}")
+	private String mesa;
+
 	@OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
 	private List<ProductSold> productSolds;
 

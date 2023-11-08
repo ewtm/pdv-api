@@ -16,6 +16,7 @@ public class SaleDataTest {
                 new BigDecimal("0"),
                 new BigDecimal("0"),
                 Payment.DINHEIRO,
+                "Mesa a",
                 new ProductSoldDataTest().newProductsSoldsSemID(products),
                 null,
                 null);

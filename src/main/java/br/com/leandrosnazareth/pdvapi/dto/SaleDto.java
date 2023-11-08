@@ -8,13 +8,14 @@ import br.com.leandrosnazareth.pdvapi.domain.model.Payment;
 import lombok.Data;
 
 @Data
-public class SaleDTO {
+public class SaleDto {
 
     private Long id;
     private BigDecimal amount;
     private BigDecimal amountPaid;
     private BigDecimal difference;
     private Payment payment;
+    private String mesa;
     private List<ProductSoldDTO> productSolds;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

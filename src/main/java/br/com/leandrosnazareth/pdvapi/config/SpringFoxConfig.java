@@ -61,11 +61,11 @@ public class SpringFoxConfig {
                 "PDV API REST",
                 "API REST sistema de vendas em PDV.",
                 "1.0",
-                "Terms of Service",
-                new Contact("Leandro Nazareth", "https://www.linkedin.com/in/leandrosnazareth",
-                        "leandrosnazareth@gmail.com"),
-                "GNU GENERAL PUBLIC LICENSE",
-                "https://www.gnu.org/licenses/gpl-3.0.pt-br.html", Collections.emptyList());
+                "",
+                new Contact("", "",
+                        ""),
+                "",
+                "", Collections.emptyList());
     }
 
     // Em seguida, vamos configurar o JWT SecurityContext global AuthorizationScope

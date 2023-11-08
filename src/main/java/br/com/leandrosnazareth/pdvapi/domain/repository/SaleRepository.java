@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import br.com.leandrosnazareth.pdvapi.domain.entity.Sale;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
 
     @Query("SELECT SUM(amount) FROM Sale")
